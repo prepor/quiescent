@@ -16,3 +16,28 @@
     `(def ~name ~docstr (quiescent/component (fn ~argvec ~@body)))))
 
 
+(defmacro wrapper
+  [child & body]
+  `(-> (quiescent/make-wrapper ~child)
+       ~@body
+       quiescent/wrapper-compile))
+
+(defmacro on-update
+  [v bindings & body]
+  `(quiescent/on-update* ~v (fn ~bindings ~@body)))
+
+(defmacro on-mount
+  [v bindings & body]
+  `(quiescent/on-mount* ~v (fn ~bindings ~@body)))
+
+(defmacro on-will-mount
+  [v bindings & body]
+  `(quiescent/on-will-mount* ~v (fn ~bindings ~@body)))
+
+(defmacro on-will-update
+  [v bindings & body]
+  `(quiescent/on-will-update* ~v (fn ~bindings ~@body)))
+
+(defmacro on-will-unmount
+  [v bindings & body]
+  `(quiescent/on-will-unmount* ~v (fn ~bindings ~@body)))

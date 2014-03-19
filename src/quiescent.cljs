@@ -69,74 +69,59 @@
                 (binding [*component* this]
                   (f)))))}))
 
+(defn make-wrapper
+  [child]
+  {:child child
+   :callbacks {}})
 
+(defn wrapper-clb
+  [wrapper type clb]
+  (assoc-in wrapper [:callbacks type] clb))
 
-(defn on-update
+(defn wrapper-compile
+  [{:keys [child callbacks]}]
+  (WrapperComponent. (clj->js (assoc callbacks :wrappee child))))
+
+(defn on-update*
   "Wrap a component, specifying a function to be called on the
   componentDidUpdate lifecycle event.
 
   The function will be passed the rendered DOM node."
-  [child f]
-  (WrapperComponent #js {:wrappee child
-                         :onUpdate f}))
+  [v f]
+  (wrapper-clb v :onUpdate f))
 
-(defn on-mount
+(defn on-mount*
   "Wrap a component, specifying a function to be called on the
   componentDidMount lifecycle event.
 
   The function will be passed the rendered DOM node."
-  [child f]
-  (WrapperComponent #js {:wrappee child
-                         :onMount f}))
-
-(defn on-render
-  "Wrap a component, specifying a function to be called on the
-  componentDidMount AND the componentDidUpdate lifecycle events.
-
-  The function will be passed the rendered DOM node."
-  [child f]
-  (WrapperComponent #js {:wrappee child
-                         :onMount f
-                         :onUpdate f}))
+  [v f]
+  (wrapper-clb v :onMount f))
 
 
-(defn on-will-mount
+(defn on-will-mount*
   "Wrap a component, specifying a function to be called on the
   componentWillMount lifecycle event.
 
   The function will be called with no arguments."
-  [child f]
-  (WrapperComponent #js {:wrappee child
-                         :onWillMount f}))
+  [v f]
+  (wrapper-clb v :onWillMount f))
 
-(defn on-will-update
+(defn on-will-update*
   "Wrap a component, specifying a function to be called on the
   componentWillUpdate lifecycle event.
 
   The function will be called with no arguments."
-  [child f]
-  (WrapperComponent #js {:wrappee child
-                         :onWillUpdate f}))
+  [v f]
+  (wrapper-clb v :onWillUpdate f))
 
-(defn on-will-render
-  "Wrap a component, specifying a function to be called on the
-  componentWillMount AND the componentWillUpdate lifecycle events.
-
-  The function will be called with no arguments."
-  [child f]
-  (WrapperComponent #js {:wrappee child
-                         :onWillMount f
-                         :onWillUpdate f}))
-
-
-(defn on-will-unmount
+(defn on-will-unmount*
   "Wrap a component, specifying a function to be called on the
   componentWillUnmount lifecycle event.
 
   The function will be called with no arguments."
-  [child f]
-  (WrapperComponent #js {:wrappee child
-                         :onWillUnmount f}))
+  [v f]
+  (wrapper-clb v :onWillUnmounte f))
 
 
 (defn render
